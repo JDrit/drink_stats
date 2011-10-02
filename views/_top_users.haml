@@ -25,9 +25,9 @@
 
 %strong Top Users - #{title}
 %ul
-- for item in top_users
-  %li
-    =partial(:user, :locals => {:username => item["username"]})
-    \ - #{item["row_count"].to_i}
+  - for item in top_users
+    %li
+      =partial(:user, :locals => {:username => item["username"]})
+      \ - #{item["row_count"].to_i}
 
 -#%div{:id=>"top-drinks"}

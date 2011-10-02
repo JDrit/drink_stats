@@ -13,33 +13,38 @@
 #home-left-column {
 	width: 40%;
 	float: left;
-	height: 768px;
+	height: 660px;
 }
 
 #home-right-column {
 	width: 60%;
 	float: right;
-	height: 768px;
+	height: 660px;
 }
 
 #user-left-column {
 	width: 40%;
 	float: left;
-	height: 768px;
+	height: 660px;
 }
 
 #user-right-column {
 	width: 60%;
 	float: right;
-	height: 768px;
+	height: 660px;
 }
 
 #user-recent-drops {
 	padding-right: 10px;
 }
 
+ul {
+	margin: 5px;
+}
+
 li {
-	padding-bottom: 10px;
+	padding-bottom: 2px;
+	font-size: 0.9em;
 }
 
 #links {
