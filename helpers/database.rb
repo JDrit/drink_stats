@@ -1,8 +1,14 @@
 require 'mysql2'
+require 'yaml'
+
 module DrinkStats
   class Database
     def initialize
-      @connection ||=  Mysql2::Client.new(:host => "127.0.0.1", :username => "drink_read", :password => "drink_read", :port=>3307, :database=>"drink")
+      # Read and symbolize the keys
+      config = YAML.load_file('config/database.yml')
+      config = config.inject({}) { |memo,(k,v)| memo[k.to_sym] = v; memo }
+
+      @connection ||=  Mysql2::Client.new(config)
     end
 
     def get_results_for_overall
