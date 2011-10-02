@@ -4,7 +4,7 @@ require_relative 'helpers/init'
 helpers Sinatra::Partials
 before do
   set :db_connection, DrinkStats::Database.new
-  @current_username = "madmike"
+  @current_username = ""
 end
 
 get '/' do
@@ -13,9 +13,14 @@ get '/' do
   haml :home
 end
 
+post '/fordrink' do
+  @current_username = params[:username]
+  redirect "/#{params[:username]}"
+end
+
 get '/item/:item' do
   top_users =  connection.top_users_per_drink(params[:item])
-  
+
   @item_stats = case
                 when top_users.to_a.empty?
                   nil
