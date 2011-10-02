@@ -7,13 +7,13 @@ module DrinkStats
 
     def get_results_for_overall
       {
-        :top_drinks =>top_drinks,
+        :top_drinks          =>top_drinks,
         :top_users_this_year => top_ten_users,
-        :top_users_all_time => top_ten_users(:all_time => true),
-        :recent_drops => recent_drops,
-        :popular_dates => most_popular_dates,
-        :top_spenders => top_spenders,
-        :popular_hours => popular_hours
+        :top_users_all_time  => top_ten_users(:all_time => true),
+        :recent_drops        => recent_drops,
+        :popular_days        => popular_days,
+        :top_spenders        => top_spenders,
+        :popular_hours       => popular_hours
       }
     end
 
@@ -21,10 +21,10 @@ module DrinkStats
       recent = recent_drops(username)
       return nil if recent.to_a.empty?
       {
-        :top_drinks => top_drinks(username),
-        :recent_drops => recent,
-        :popular_dates => most_popular_dates(username),
-        :spent => spent_per_user(username),
+        :top_drinks    => top_drinks(username),
+        :recent_drops  => recent,
+        :popular_days  => popular_days(username),
+        :spent         => spent_per_user(username),
         :popular_hours => popular_hours(username)
       }
     end
@@ -63,12 +63,24 @@ module DrinkStats
       query("SELECT username, SUM(ABS(amount)) as sum_amount FROM money_log WHERE username ='#{escape(username)}' AND direction='out' GROUP BY username")
     end
 
-    def most_popular_dates(username=nil)
-      query("SELECT DATE(time) as time, COUNT(*) as row_count FROM drop_log #{user_where_clause(username)} GROUP BY DATE(time) ORDER BY row_count DESC LIMIT 10")
+    def popular_days(username=nil)
+      results = query("SELECT WEEKDAY(time) as time, COUNT(*) as row_count FROM drop_log #{user_where_clause(username)} GROUP BY WEEKDAY(time) ORDER BY row_count DESC LIMIT 10")
+
+      days = [0]*7
+      for item in results
+        days[item["time"]] = item["row_count"]
+      end
+      days
     end
 
     def popular_hours(username=nil)
-      query("SELECT COUNT(*) as row_count, HOUR(time) as time FROM drop_log #{user_where_clause(username)} GROUP BY HOUR(time) ORDER BY row_count DESC")
+      results = query("SELECT COUNT(*) as row_count, HOUR(time) as time FROM drop_log #{user_where_clause(username)} GROUP BY HOUR(time) ORDER BY row_count DESC")
+
+      hours = [0]*24
+      for item in results
+        hours[item["time"]] = item["row_count"]
+      end
+      hours
     end
 
     private 

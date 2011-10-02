@@ -7,7 +7,7 @@
 
 
 
-  var pie = r.g.piechart(320, 240, 100, #{generate_graph_items(top_users, "row_count", :integer => true)}, {legend: #{generate_graph_items(top_users, "username", :quoted=>true)}, legendpos: "west", href: #{generate_graph_items(top_users, "username", :quoted=>true, :link=>"")}});
+  var pie = r.g.piechart(320, 240, 100, #{generate_graph_items(top_users, "row_count", :integer => true)}, {legend: #{generate_graph_items(top_users, "username")}, legendpos: "west", href: #{generate_graph_items(top_users, "username", :link=>"")}});
   pie.hover(function () {
   this.sector.stop();
   this.sector.scale(1.1, 1.1, this.cx, this.cy);

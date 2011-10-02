@@ -1,13 +1,9 @@
 - username ||= nil
 - content_for :javascript do
-  var r = Raphael("top-drinks#{"-#{username}" if username}");
+  var r = Raphael("top-drinks");
   r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
 
-  r.g.text(320, 100, "Top Drinks #{" for #{username}" if username}").attr({"font-size": 20});
-
-
-
-  var pie = r.g.piechart(320, 240, 100, #{generate_graph_items(top_drinks, "slot_count", :integer => true)}, {legend: #{generate_graph_items(top_drinks, "slot", :quoted=>true)}, legendpos: "west", href: #{generate_graph_items(top_drinks, "slot", :quoted=>true, :link=>"item")}});
+  var pie = r.g.piechart(320, 120, 100, #{generate_graph_items(top_drinks, "slot_count", :integer => true)}, {legend: #{generate_graph_items(top_drinks, "slot", :count=>"slot_count")}, legendpos: "west", href: #{generate_graph_items(top_drinks, "slot", :link=>"item")}});
   pie.hover(function () {
   this.sector.stop();
   this.sector.scale(1.1, 1.1, this.cx, this.cy);
@@ -25,11 +21,6 @@
   });
 
 
-%div
+%div{:id=>"top-drinks-container"}
   %em Top Drinks
-  - for item in top_drinks
-    %p
-      =partial(:item, :locals => {:slot => item["slot"]})
-      \- #{item["slot_count"]}
-
-%div{:id=>"top-drinks#{"-#{username}" if username}"}
+  %div{:id=>"top-drinks"}

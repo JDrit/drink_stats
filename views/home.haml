@@ -6,8 +6,8 @@
   =partial(:top_users, :locals=>{:title => "This Year", :top_users => @overall_stats[:top_users_this_year]})
   =partial(:top_users, :locals=>{:title=> "Spenders", :top_users=> @overall_stats[:top_spenders]})
   =partial(:recent_drops, :locals=>{:recent_drops=>@overall_stats[:recent_drops]})
-  =partial(:popular_times, :locals=>{:popular=>@overall_stats[:popular_dates]})
-  =partial(:popular_times, :locals=>{:popular=>@overall_stats[:popular_hours]})
+  =partial(:popular_times, :locals=>{:popular=>@overall_stats[:popular_days], :unit=>:days})
+  =partial(:popular_times, :locals=>{:popular=>@overall_stats[:popular_hours], :unit=>:hours})
 
 %div{:style =>"float: right;"}
   =partial(:user_stats, :locals => {:username => @current_username, :user_stats => @user_stats})

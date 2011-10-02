@@ -7,15 +7,23 @@ module DrinkStats
         "Hour #{date}"
       end
     end
+
     def debug_mysql(result)
       result.to_a
     end
+
     def generate_graph_items(arr, key, options={})
       options[:integer] ||= false
-      options[:quoted] ||= false
-      options[:link] ||= false
+      options[:link]    ||= false
+      options[:count]   ||= false
+
       arr.map do |d|
-        el = (options[:qouted]) ? "\"#{d[key]}\"" : d[key]
+        el = if options[:count]
+          "#{d[options[:count]]} - #{d[key]}"
+        else
+          d[key]
+        end
+
         el = el.to_i if options[:integer]
         el = "#{"/" if options[:link] != ""}#{options[:link]}/#{el}" if options[:link]
         el
