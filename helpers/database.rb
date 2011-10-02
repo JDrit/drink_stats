@@ -7,7 +7,7 @@ module DrinkStats
 
     def get_results_for_overall
       {
-        :top_drinks          =>top_drinks,
+        :top_drinks          => top_drinks,
         :top_users_this_year => top_ten_users,
         :top_users_all_time  => top_ten_users(:all_time => true),
         :recent_drops        => recent_drops,
@@ -56,11 +56,11 @@ module DrinkStats
 
     def top_spenders
       exclude_list = ["'longusername'", "'sean'", "'openhouse'", "'yinyang'", "'thunderdome'"]
-      query("SELECT username, SUM(ABS(amount)) as row_count FROM money_log WHERE direction='out' AND username NOT IN (#{exclude_list.join(',')}) GROUP BY username ORDER BY row_count DESC LIMIT 10")
+      query("SELECT username, SUM(ABS(amount)) as row_count FROM money_log WHERE reason='drop' AND username NOT IN (#{exclude_list.join(',')}) GROUP BY username ORDER BY row_count DESC LIMIT 10")
     end
 
     def spent_per_user(username)
-      query("SELECT username, SUM(ABS(amount)) as sum_amount FROM money_log WHERE username ='#{escape(username)}' AND direction='out' GROUP BY username")
+      query("SELECT username, SUM(ABS(amount)) as sum_amount FROM money_log WHERE username ='#{escape(username)}' AND reason='drop' GROUP BY username")
     end
 
     def popular_days(username=nil)

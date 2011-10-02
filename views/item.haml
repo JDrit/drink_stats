@@ -1,1 +1,4 @@
-=partial(:top_users, :locals=>{:title => "for #{params[:item]}", :top_users => @item_stats[:top_users]})
+#links
+  %a{:href => "/", :title => "Home"} Home
+#item-top-users
+  =partial(:top_users, :locals=>{:title => "for #{params[:item]}", :top_users => @item_stats[:top_users]})

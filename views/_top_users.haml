@@ -1,9 +1,7 @@
-- label = title.gsub(" ", "-").downcase
-- content_for :javascript do
-  var r = Raphael("top-drinks-#{label}");
+-# label = title.gsub(" ", "-").downcase
+-# content_for :javascript do
+  var r = Raphael("top-drinks");
   r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
-
-  r.g.text(320, 100, "Top Users - #{title}").attr({"font-size": 20});
 
 
 
@@ -26,11 +24,10 @@
 
 
 %strong Top Users - #{title}
-
+%ul
 - for item in top_users
-  %p
+  %li
     =partial(:user, :locals => {:username => item["username"]})
     \ - #{item["row_count"].to_i}
 
-
-%div{:id=>"top-drinks-#{label}"}
+-#%div{:id=>"top-drinks"}

@@ -1,1 +1,38 @@
-=partial(:user_stats, :locals => {:username => params[:username], :user_stats => @user_stats})
+- username = params[:username]
+
+
+- if !@user_stats
+  %div
+  - if username == @current_username
+    "You haven't had any activty yet, you should probably drop a drink :
+  - else
+    #{username} hasn't dropped any drinks yet... he is probably poor
+- else
+  #user-left-column
+    #links
+      %a{:href => "/", :title => "Home"} Home
+    #stats
+      Stats for
+      %strong #{username}
+      Spent a total of #{@user_stats[:spent].first["sum_amount"].to_i} credits<br />
+    #user-recent-drops
+      =partial(:recent_drops,
+               :locals => {:recent_drops => @user_stats[:recent_drops]})
+  #user-right-column
+    #user-top-drinks.user-cell
+      =partial(:top_drinks,
+               :locals => {:title      => username,
+                           :username   => username,
+                           :top_drinks => @user_stats[:top_drinks]})
+    #user-popular-days.user-cell
+      =partial(:popular_times,
+               :locals => {:title    => username,
+                           :username => username,
+                           :unit     => :days,
+                           :popular  => @user_stats[:popular_days]})
+    #user-popular-hours.user-cell
+      =partial(:popular_times,
+               :locals => {:title    => username,
+                           :username => username,
+                           :unit     => :hours,
+                           :popular  => @user_stats[:popular_hours]})
