@@ -3,7 +3,7 @@
   var r = Raphael("top-drinks");
   r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
 
-  var pie = r.g.piechart(400, 100, 80, #{generate_graph_items(top_drinks, "slot_count", :integer => true)}, {legend: #{generate_graph_items(top_drinks, "slot", :count=>"slot_count")}, legendpos: "west", href: #{generate_graph_items(top_drinks, "slot", :link=>"item")}});
+  var pie = r.g.piechart(400, 100, 80, #{generate_graph_items(top_drinks, "item_count", :integer => true)}, {legend: #{generate_graph_items(top_drinks, "item_name", :count=>"item_count")}, legendpos: "west", href: #{generate_graph_items(top_drinks, "item_name", :link=>"item")}});
   pie.hover(function () {
   this.sector.stop();
   this.sector.scale(1.1, 1.1, this.cx, this.cy);

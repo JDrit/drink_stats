@@ -36,7 +36,8 @@ module DrinkStats
     end
 
     def top_drinks(username=nil)
-      query("SELECT COUNT(slot) as slot_count, slot FROM drop_log #{user_where_clause(username)}  GROUP BY slot ORDER BY slot_count DESC LIMIT 10")
+	query("SELECT COUNT(drop_log.item_id) AS item_count, item_name FROM drop_log JOIN drink_items ON drop_log.item_id = drink_items.item_id #{user_where_clause(username)} GROUP BY drop_log.item_id ORDER BY item_count DESC LIMIT 10")
+  	#query("SELECT COUNT(slot) as slot_count, slot FROM drop_log #{user_where_clause(username)}  GROUP BY slot ORDER BY slot_count DESC LIMIT 10")
     end
 
     def top_ten_users(options={})
@@ -53,11 +54,12 @@ module DrinkStats
     end
 
     def recent_drops(username=nil)
-      query("SELECT * FROM drop_log #{user_where_clause(username)} ORDER BY time DESC LIMIT 10")
+      query("SELECT * FROM drop_log  JOIN drink_items ON drop_log.item_id = drink_items.item_id JOIN machine_aliases ON drop_log.machine_id = machine_aliases.machine_id #{user_where_clause(username)} ORDER BY time DESC LIMIT 10")
     end
 
     def top_users_per_drink(item)
-      query("SELECT COUNT(*) as row_count, username, slot FROM drop_log WHERE slot='#{escape(item)}' GROUP BY username ORDER BY row_count DESC LIMIT 10")
+	query("SELECT COUNT( * ) AS row_count, username, slot FROM drop_log JOIN drink_items ON drop_log.item_id = drink_items.item_id WHERE drink_items.item_name = '#{escape(item)}' GROUP BY drop_log.username ORDER BY row_count DESC LIMIT 10")
+      #query("SELECT COUNT(*) as row_count, username, slot FROM drop_log WHERE slot='#{escape(item)}' GROUP BY username ORDER BY row_count DESC LIMIT 10")
     end
 
     def top_spenders
