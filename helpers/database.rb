@@ -39,7 +39,7 @@ module DrinkStats
     end
 
     def top_drinks(username=nil)
-	query("SELECT COUNT(drop_log.item_id) AS item_count, item_name FROM drop_log JOIN drink_items ON drop_log.item_id = drink_items.item_id #{user_where_clause(username)} WHERE drop_log.username NOT IN (#{@@exclude_list.join(',')}) GROUP BY drop_log.item_id ORDER BY item_count DESC LIMIT 10")
+	query("SELECT COUNT(drop_log.item_id) AS item_count, item_name FROM drop_log JOIN drink_items ON drop_log.item_id = drink_items.item_id #{user_where_clause(username)} GROUP BY drop_log.item_id ORDER BY item_count DESC LIMIT 10")
   	#query("SELECT COUNT(slot) as slot_count, slot FROM drop_log #{user_where_clause(username)}  GROUP BY slot ORDER BY slot_count DESC LIMIT 10")
     end
 
@@ -77,7 +77,8 @@ module DrinkStats
     end
 
     def popular_days(username=nil)
-      	results = query("SELECT WEEKDAY(time) as time, COUNT(*) as row_count FROM drop_log #{user_where_clause(username)} GROUP BY WEEKDAY(time) ORDER BY row_count DESC LIMIT 10")
+      results = query("SELECT WEEKDAY(time) as time, COUNT(*) as row_count FROM drop_log #{user_where_clause(username)} GROUP BY WEEKDAY(time) ORDER BY row_count DESC LIMIT 10")
+
       days = [0]*7
       for item in results
         days[item["time"]] = item["row_count"]
