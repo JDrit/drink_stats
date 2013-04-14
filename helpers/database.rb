@@ -3,6 +3,9 @@ require 'yaml'
 
 module DrinkStats
   class Database
+
+    @@exclude_list = ["'longusername'", "'sean'", "'openhouse'", "'yinyang'", "'thunderdome'"]
+
     def initialize
       # Read and symbolize the keys
       config = YAML.load_file('config/database.yml')
@@ -41,16 +44,20 @@ module DrinkStats
     end
 
     def top_ten_users(options={})
-      where_clause = case
-                     when options[:all_time]
-                       ""
-                     when options[:year]
-                       "WHERE YEAR(time) = '#{options[:year]}'"
-                     else
-                       "WHERE YEAR(time) = YEAR(CURDATE())"
-                     end
-
-      query("SELECT COUNT(*) as row_count, username FROM drop_log #{where_clause} GROUP BY username ORDER BY row_count DESC LIMIT 10")
+      
+	if options[:all_time]
+     		query("SELECT COUNT(*) as row_count, username FROM drop_log WHERE username NOT IN (#{@@exclude_list.join(',')}) GROUP BY username ORDER BY row_count DESC LIMIT 10")
+	else
+		where_clause = case
+        		when options[:all_time]
+                		""
+                     	when options[:year]
+                       		"WHERE YEAR(time) = '#{options[:year]}'"
+                    	else
+                       		"WHERE YEAR(time) = YEAR(CURDATE())"
+                     	end
+	      query("SELECT COUNT(*) as row_count, username FROM drop_log #{where_clause} AND username NOT IN (#{@@exclude_list.join(',')}) GROUP BY username ORDER BY row_count DESC LIMIT 10")
+	end
     end
 
     def recent_drops(username=nil)
@@ -59,12 +66,10 @@ module DrinkStats
 
     def top_users_per_drink(item)
 	query("SELECT COUNT( * ) AS row_count, username, slot FROM drop_log JOIN drink_items ON drop_log.item_id = drink_items.item_id WHERE drink_items.item_name = '#{escape(item)}' GROUP BY drop_log.username ORDER BY row_count DESC LIMIT 10")
-      #query("SELECT COUNT(*) as row_count, username, slot FROM drop_log WHERE slot='#{escape(item)}' GROUP BY username ORDER BY row_count DESC LIMIT 10")
     end
 
     def top_spenders
-      exclude_list = ["'longusername'", "'sean'", "'openhouse'", "'yinyang'", "'thunderdome'"]
-      query("SELECT username, SUM(ABS(amount)) as row_count FROM money_log WHERE reason='drop' AND username NOT IN (#{exclude_list.join(',')}) GROUP BY username ORDER BY row_count DESC LIMIT 10")
+      query("SELECT username, SUM(ABS(amount)) as row_count FROM money_log WHERE reason='drop' AND username NOT IN (#{@@exclude_list.join(',')}) GROUP BY username ORDER BY row_count DESC LIMIT 10")
     end
 
     def spent_per_user(username)
