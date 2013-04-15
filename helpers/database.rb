@@ -61,7 +61,7 @@ module DrinkStats
     end
 
     def recent_drops(username=nil)
-      query("SELECT * FROM drop_log  JOIN drink_items ON drop_log.item_id = drink_items.item_id JOIN machine_aliases ON drop_log.machine_id = machine_aliases.machine_id #{user_where_clause(username)} ORDER BY time DESC LIMIT 10")
+      query("SELECT * FROM drop_log  JOIN drink_items ON drop_log.item_id = drink_items.item_id JOIN machines ON drop_log.machine_id = machines.machine_id #{user_where_clause(username)} ORDER BY time DESC LIMIT 10")
     end
 
     def top_users_per_drink(item)
