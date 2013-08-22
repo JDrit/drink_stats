@@ -1,7 +1,9 @@
-$LOAD_PATH.unshift(Dir.pwd)
-require 'main'
+require 'bundler'
+Bundler.require
+#$LOAD_PATH.unshift(Dir.pwd)
+require './main'
 
 use Rack::ShowExceptions
-use Rack::Static, :urls => ['/js', '/css'], :root => 'public'
+#use Rack::Static, :urls => ['/js', '/css'], :root => 'public'
 
 run Main.new
